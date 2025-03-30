@@ -1,4 +1,3 @@
-// src/components/AdminDashboard.js
 import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';  
 
@@ -7,14 +6,33 @@ const AdminDashboard = () => {
   const [recentActivities, setRecentActivities] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("authToken"); // Récupère le token depuis le localStorage
+
+    if (!token) {
+      console.log("No token found");
+      return;  // Si pas de token, on arrête la requête
+    }
+
     // Fetch statistics from the backend (replace with your actual API URL)
-    fetch('http://localhost:5000/api/admin-statistics')
+    fetch('http://localhost:5000/api/admin/admin-statistics', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,  // Ajoute le token dans l'en-tête
+      }
+    })
       .then(response => response.json())
       .then(data => setStatistics(data))
       .catch(error => console.error('Error fetching statistics:', error));
 
     // Fetch recent activities (replace with your actual API URL)
-    fetch('http://localhost:5000/api/recent-activities')
+    fetch('http://localhost:5000/api/admin/recent-activities', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,  // Ajoute le token ici aussi
+      }
+    })
       .then(response => response.json())
       .then(data => setRecentActivities(data))
       .catch(error => console.error('Error fetching recent activities:', error));

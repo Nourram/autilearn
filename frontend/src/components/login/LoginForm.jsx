@@ -14,16 +14,16 @@ function LoginForm() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post('http://localhost:5000/api/admin/login', {
         email,
         password,
-      });
+      });      
 
       if (response.data.token) {
         // Store token in localStorage
         localStorage.setItem("authToken", response.data.token);
         // Redirect to profile page or another route
-        navigate('/profile');  // Change '/profile' to the appropriate route
+        navigate('/admin-dashboard');  // Redirection vers la page AdminDashboard
       } else {
         // Display error message
         setError(response.data.message);

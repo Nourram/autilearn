@@ -2,10 +2,31 @@ const express = require("express");
 const Admin = require("../models/admin"); // Correct path to Admin model
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authMiddleware = require("../middleware/authMiddleware");  // Vérifie le bon chemin d'import
-
-
+const authMiddleware = require("../middleware/authMiddleware"); // Vérifie le bon chemin d'import
 const router = express.Router();
+
+// Exemple de données pour les statistiques (cela doit venir de votre base de données dans un cas réel)
+const statistics = {
+  totalUsers: 100,
+  totalExercises: 200,
+  activeUsers: 50,
+};
+
+// Exemple de données pour les activités récentes
+const recentActivities = [
+  { user: 'User1', action: 'Logged in', timestamp: '2023-03-26 12:30' },
+  { user: 'User2', action: 'Completed exercise', timestamp: '2023-03-26 12:45' },
+];
+
+// Route pour obtenir les statistiques
+router.get('/admin-statistics', authMiddleware, (req, res) => {
+  res.json(statistics); // Vous pouvez remplacer cela par des données provenant de la base de données
+});
+
+// Route pour obtenir les activités récentes
+router.get('/recent-activities', authMiddleware, (req, res) => {
+  res.json(recentActivities); // Remplacez par des données provenant de la base de données
+});
 
 // Signup Route
 router.post("/signup", async (req, res) => {
@@ -62,17 +83,6 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error); // Log the error
     res.status(500).json({ message: "Server error" });
-  }
-});
-
-
-router.get('/statistics', authMiddleware, async (req, res) => {
-  try {
-    // Logic to fetch statistics
-    res.status(200).json({ message: "Here are the statistics." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching statistics" });
   }
 });
 
